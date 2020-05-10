@@ -1,0 +1,86 @@
+---
+title: "mtcars Dataset - Data Products - week 4"
+author: "Gustavo Seifer"
+date: "09.05.2020"
+output:
+  slidy_presentation: default
+  html_document:
+    number_sections: yes
+    toc: yes
+  ioslides_presentation: default
+mode: selfcontained
+job: Reproducible Pitch Presentation
+subtitle: Variables and MPG
+highlighter: highlight.js
+widgets: bootstrap
+---
+
+## Reproducible Pitch
+
+### General Information  
+
+- URL: *https://github.com/gus079/week4.git*
+- Please find all the files in the above link. 
+- 1- I create a Shiny application and deploy it on Rstudio's servers.
+- 2- I prepare a reproducible pitch presentation about the application.
+
+### Find all details here (Chequear)
+URL: *https://www.coursera.org/learn/data-products/peer/tMYrn/course-project-shiny-application-and-reproducible-pitch*
+
+---
+
+## mtcars Dataset
+
+### Motor Trend Car Road Tests
+
+> The data was extracted from the 1974 Motor Trend US magazine, and includes fuel consumption and 10 characteristics of automobile design and performance for 32 automobiles (1973-1974 models).
+
+> More details in:
+
+URL: *https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/mtcars*
+
+```{r, comment= NA}
+library(datasets)
+head(mtcars)
+```
+
+---
+
+## Structure of mtcars Dataset - Variables
+
+32 x 11 (32 rows or observations and 11 columns or variables)
+
+| Field | Details |
+| ----- | ------ |
+| mpg | Miles/ gallon |
+| cyl | Number of cylinders |
+| disp | Displacement |
+| hp | Gross horsepower |
+| drat | Rear axle ratio |
+| wt | Weight (lb) |
+| qsec | 1/4 mile time |
+| vs | V/S |
+| am | Transmission (0 = automatic, 1 = manual) |
+| gear | Number of forward gears |
+| carb | Number of carburetors |
+
+---
+
+## Main Code
+
+```r
+  formulaTextPoint <- reactive({
+    paste("mpg ~", "as.integer(", input$variable, ")")  })
+  
+  fit <- reactive({
+    lm(as.formula(formulaTextPoint()), data=mpgData)  })
+  ...
+  output$fit <- renderPrint({
+    summary(fit()) })
+  
+  output$mpgPlot <- renderPlot({
+    with(mpgData, {
+      plot(as.formula(formulaTextPoint()))
+      abline(fit(), col=2)
+    })  })
+```
